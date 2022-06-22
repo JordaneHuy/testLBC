@@ -39,6 +39,10 @@ class HomeViewController: UIViewController {
         configureView()
         configureLayout()
         self.view.backgroundColor = .blue
+        
+        HomeWorker().getListing(completion: { items, error in
+            print(items)
+        })
     }
     
     // MARK: View Configuration
