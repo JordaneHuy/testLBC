@@ -13,31 +13,42 @@ import Combine
 class HomeViewModel {
     // MARK: Properties
     weak var appCoordinator : AppCoordinator?
+    
     @Published var items: [Item] = []
-    
-    var subscriptions = [AnyCancellable]()
-    
+        
     // MARK: Init
     
     init(appCoordinator: AppCoordinator) {
         self.appCoordinator = appCoordinator
         
+        getData()
+    }
+    
+    // MARK: Methods
+    
+    func getData() {
+        getCategories()
         getListing()
     }
     
     func getListing() {
         HomeWorker().getListing { [weak self] items, error in
-            guard let items = items else {
-                return
-            }
-            
+            guard let items = items else { return }
             self?.items = items
         }
     }
     
-    // MARK: Methods
+    func getCategories() {
+        HomeWorker().getCategories { categories, error in
+            guard let categories = categories else { return }
+            CoreDataManager.shared.insertCategories(categories: categories)
+        }
+    }
     
-    func pushToDetail(){
-        appCoordinator?.pushToDetail()
+    // MARK: Coordinator
+    
+    func pushToDetail(itemRow: Int) {
+        let item = items[itemRow]
+        appCoordinator?.pushToDetail(item: item)
     }
 }

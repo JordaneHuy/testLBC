@@ -10,19 +10,30 @@ import CoreData
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
     var appCoordinator: AppCoordinator?
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-         window = UIWindow(frame: UIScreen.main.bounds)
-         let navigationCon = UINavigationController.init()
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let navigationCon = UINavigationController.init()
         appCoordinator = AppCoordinator(navCon: navigationCon)
-         appCoordinator!.start()
-         window!.rootViewController = navigationCon
-         window!.makeKeyAndVisible()
-         return true
+        appCoordinator!.start()
+        window!.rootViewController = navigationCon
+        window!.makeKeyAndVisible()
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor(red: 250/255, green: 250/255, blue: 250/255, alpha: 1)
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        navigationCon.navigationBar.tintColor = .black
+        navigationCon.navigationBar.standardAppearance = appearance
+        navigationCon.navigationBar.compactAppearance = appearance
+        navigationCon.navigationBar.scrollEdgeAppearance = appearance
+        
+        return true
     }
 
     // MARK: - Core Data stack

@@ -17,7 +17,7 @@ class ItemTableViewCell: UITableViewCell {
         $0.layer.cornerRadius = 5
         $0.backgroundColor = .white
         $0.layer.shadowColor = UIColor.black.cgColor
-        $0.layer.shadowOffset = CGSize(width: 0.0, height: 5.0)
+        $0.layer.shadowOffset = CGSize(width: 0.0, height: 3.0)
         $0.layer.shadowOpacity = 0.1
         $0.layer.shadowRadius = 3
         
@@ -35,22 +35,34 @@ class ItemTableViewCell: UITableViewCell {
     
     private let titleLabel: UILabel = {
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.font = UIFont(name: "Avenir-Medium", size: 15)
-        $0.numberOfLines = 0
+        $0.font = UIFont(name: "Avenir-Medium", size: 16)
+        $0.textColor = .black
+        $0.numberOfLines = 3
         return $0
     }(UILabel())
     
     private let categoryLabel: UILabel = {
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.backgroundColor = .green
+        $0.font = UIFont(name: "Avenir-Medium", size: 12)
+        $0.textColor = .gray
         return $0
     }(UILabel())
     
     private let priceLabel: UILabel = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.font = UIFont(name: "Avenir-Heavy", size: 20)
+        $0.textColor = .black
         return $0
     }(UILabel())
+    
+    private let urgentImage: UIImageView = {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.isHidden = true
+        $0.image = UIImage(systemName: "exclamationmark.circle.fill")
+        $0.tintColor = .red
+        $0.contentMode = .scaleAspectFill
+        return $0
+    }(UIImageView())
     
     // MARK: Init
 
@@ -76,6 +88,7 @@ class ItemTableViewCell: UITableViewCell {
         containerView.addSubview(titleLabel)
         containerView.addSubview(categoryLabel)
         containerView.addSubview(priceLabel)
+        containerView.addSubview(urgentImage)
     }
     
     private func configureLayout() {
@@ -104,15 +117,26 @@ class ItemTableViewCell: UITableViewCell {
         // price contraints
         priceLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8).isActive = true
         priceLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -8).isActive = true
+        
+        // urgent contraints
+        urgentImage.topAnchor.constraint(equalTo: containerView.topAnchor, constant: -8).isActive = true
+        urgentImage.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -8).isActive = true
+        urgentImage.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        urgentImage.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
     
     func configure(item: Item) {
         titleLabel.text = item.title
-        categoryLabel.text = "\(item.categoryId)"
         priceLabel.text = String(format: "%.02f €", item.price)
         
         if let thumbnailUrl = item.images.small {
             thumbImageView.loadRemoteImageFrom(urlString: thumbnailUrl)
         }
+        
+        if let category = item.category {
+            categoryLabel.text = "\(category.name)"
+        }
+        
+        urgentImage.isHidden = item.isUrgent ? false : true
     }
 }

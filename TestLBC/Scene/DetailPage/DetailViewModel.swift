@@ -6,20 +6,18 @@
 //
 
 import Foundation
+import Combine
 
 class DetailViewModel {
     // MARK: Properties
     weak var appCoordinator : AppCoordinator?
     
+    @Published var item: Item
+    
     // MARK: Init
     
-    init(appCoordinator: AppCoordinator) {
+    init(appCoordinator: AppCoordinator, item: Item) {
         self.appCoordinator = appCoordinator
-    }
-    
-    // MARK: Methods
-    
-    func pushToHome(){
-        appCoordinator?.pushToDetail()
+        self.item = item
     }
 }

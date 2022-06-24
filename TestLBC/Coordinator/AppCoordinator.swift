@@ -28,8 +28,8 @@ class AppCoordinator: Coordinator {
         navigationController.pushViewController(homeViewController, animated: true)
     }
     
-    func pushToDetail() {
-        let detailViewModel = DetailViewModel.init(appCoordinator: self)
+    func pushToDetail(item: Item) {
+        let detailViewModel = DetailViewModel.init(appCoordinator: self, item: item)
         let detailViewController = DetailViewController(viewModel: detailViewModel)
         
         navigationController.pushViewController(detailViewController, animated: true)

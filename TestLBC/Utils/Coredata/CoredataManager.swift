@@ -7,60 +7,76 @@
 
 import Foundation
 import CoreData
+import UIKit
 
-final class CoreDataManager {
+public class CoreDataManager {
 
     // MARK: Properties
 
-    private let modelName: String
+    public static let shared = CoreDataManager()
 
-    // MARK: Init
-
-    init(modelName: String) {
-        self.modelName = modelName
-    }
-    
     // MARK: Core Data Stack
     
-    private(set) lazy var managedObjectContext: NSManagedObjectContext = {
-        let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-
-        managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
-
-        return managedObjectContext
+    lazy var persistentContainer: NSPersistentContainer = {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        return appDelegate.persistentContainer
     }()
     
-    private lazy var managedObjectModel: NSManagedObjectModel = {
-        guard let modelURL = Bundle.main.url(forResource: self.modelName, withExtension: "TestLBC") else {
-            fatalError("Unable to Find Data Model")
-        }
-
-        guard let managedObjectModel = NSManagedObjectModel(contentsOf: modelURL) else {
-            fatalError("Unable to Load Data Model")
-        }
-
-        return managedObjectModel
-    }()
+    // MARK: Core Data CRUD
     
-    private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
-        let persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-
-        let fileManager = FileManager.default
-        let storeName = "\(self.modelName).sqlite"
-
-        let documentsDirectoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-
-        let persistentStoreURL = documentsDirectoryURL.appendingPathComponent(storeName)
-
+    func insertCategories(categories: [Category]) {
+        deleteCategories()
+        categories.forEach { createCategory(category: $0) }
+        
+    }
+    
+    func createCategory(category: Category) {
+        let context = persistentContainer.viewContext
+        
+        let cdCategory = NSEntityDescription.insertNewObject(forEntityName: "CDCategory", into: context) as! CDCategory
+        
+        cdCategory.id = Int64(category.id)
+        cdCategory.name = category.name
+        
         do {
-            try persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType,
-                                                              configurationName: nil,
-                                                              at: persistentStoreURL,
-                                                              options: nil)
-        } catch {
-            fatalError("Unable to Load Persistent Store")
+            try context.save()
+        } catch let error {
+            print(error)
         }
+    }
+    
+    func deleteCategories() {
+        // Initialize Fetch Request
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CDCategory")
 
-        return persistentStoreCoordinator
-    }()
+        // Configure Fetch Request
+        fetchRequest.includesPropertyValues = false
+        
+        do {
+            let results = try persistentContainer.viewContext.fetch(fetchRequest)
+            for object in results {
+                guard let objectData = object as? NSManagedObject else {continue}
+                persistentContainer.viewContext.delete(objectData)
+            }
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    func fetchCategory(id: Int) -> CDCategory? {
+        let categoriesFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "CDCategory")
+        categoriesFetch.predicate = NSPredicate(format: "id == %i", id)
+         
+        do {
+            let fetchedCategories = try persistentContainer.viewContext.fetch(categoriesFetch) as! [CDCategory]
+            
+            if fetchedCategories.count > 0 {
+                return fetchedCategories.first
+            }
+            
+            return nil
+        } catch {
+            fatalError("Failed to fetch employees: \(error)")
+        }
+    }
 }

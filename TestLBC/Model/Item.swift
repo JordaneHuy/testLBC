@@ -16,6 +16,8 @@ struct Item {
     let creationDate: Date
     let images: ItemImage
     let isUrgent: Bool
+    
+    var category: Category? = nil
 }
 
 extension Item: Codable {
@@ -40,5 +42,9 @@ extension Item: Codable {
         creationDate = try values.decode(Date.self, forKey: .creationDate)
         images = try values.decode(ItemImage.self, forKey: .images)
         isUrgent = try values.decode(Bool.self, forKey: .isUrgent)
+        
+        if let cdCategory = CoreDataManager.shared.fetchCategory(id: categoryId) {
+            category = Category(cdCategory: cdCategory)
+        }
     }
 }
