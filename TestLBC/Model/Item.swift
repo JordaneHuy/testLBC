@@ -14,7 +14,7 @@ struct Item {
     let description: String
     let price: Float
     let creationDate: Date
-    //let images: ItemImage
+    let images: ItemImage
     let isUrgent: Bool
 }
 
@@ -26,6 +26,19 @@ extension Item: Codable {
         case description
         case price
         case creationDate = "creation_date"
+        case images = "images_url"
         case isUrgent = "is_urgent"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decode(Int.self, forKey: .id)
+        categoryId = try values.decode(Int.self, forKey: .categoryId)
+        title = try values.decode(String.self, forKey: .title)
+        description = try values.decode(String.self, forKey: .description)
+        price = try values.decode(Float.self, forKey: .price)
+        creationDate = try values.decode(Date.self, forKey: .creationDate)
+        images = try values.decode(ItemImage.self, forKey: .images)
+        isUrgent = try values.decode(Bool.self, forKey: .isUrgent)
     }
 }

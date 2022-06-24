@@ -29,6 +29,27 @@ class HomeWorker {
         })
     }
     
+    func getCategories(completion: @escaping ([Category]?, Error?) -> Void) {
+        request(endpoint: .getCategories, completion: { data, error in
+            guard let data = data, error == nil else {
+                completion(nil, error)
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+
+            do {
+                let items = try decoder.decode([Category].self, from: data)
+                completion(items, nil)
+            } catch {
+                debugPrint("error in parsing : \(error)")
+                completion(nil, error)
+                return
+            }
+        })
+    }
+    
     func request(endpoint: HomeEndpoint, completion: @escaping (Data?, Error?) -> Void) {
         let session = URLSession.shared
 

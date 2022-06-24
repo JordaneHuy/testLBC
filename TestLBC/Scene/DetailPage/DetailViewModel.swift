@@ -8,11 +8,16 @@
 import Foundation
 
 class DetailViewModel {
+    // MARK: Properties
     weak var appCoordinator : AppCoordinator?
+    
+    // MARK: Init
     
     init(appCoordinator: AppCoordinator) {
         self.appCoordinator = appCoordinator
     }
+    
+    // MARK: Methods
     
     func pushToHome(){
         appCoordinator?.pushToDetail()
