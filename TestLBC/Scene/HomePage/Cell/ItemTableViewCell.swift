@@ -137,6 +137,6 @@ class ItemTableViewCell: UITableViewCell {
             categoryLabel.text = "\(category.name)"
         }
         
-        urgentImage.isHidden = item.isUrgent ? false : true
+        urgentImage.isHidden = !item.isUrgent
     }
 }

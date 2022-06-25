@@ -65,6 +65,17 @@ class DetailViewController: UIViewController {
         return $0
     }(UILabel())
     
+    private let urgentLabel: UILabel = {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.font = UIFont(name: "Avenir-Medium", size: 12)
+        $0.text = "• Urgent"
+        $0.textColor = .systemPink
+        $0.layer.masksToBounds = true
+        $0.layer.cornerRadius = 5
+        $0.isHidden = true
+        return $0
+    }(UILabel())
+    
     private let priceButton: UIButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.backgroundColor = .orange
@@ -120,6 +131,7 @@ class DetailViewController: UIViewController {
         scrollStackView.addArrangedSubview(descriptionView)
         
         descriptionView.addSubview(categoryLabel)
+        descriptionLabel.addSubview(urgentLabel)
         descriptionView.addSubview(titleLabel)
         descriptionView.addSubview(descriptionLabel)
         descriptionView.addSubview(dateLabel)
@@ -149,7 +161,10 @@ class DetailViewController: UIViewController {
         // category constraints
         categoryLabel.leftAnchor.constraint(equalTo: descriptionView.leftAnchor, constant: 8).isActive = true
         categoryLabel.topAnchor.constraint(equalTo: descriptionView.topAnchor, constant: 8).isActive = true
-        categoryLabel.rightAnchor.constraint(equalTo: descriptionView.rightAnchor, constant: -8).isActive = true
+        
+        // urgent constraints
+        urgentLabel.leftAnchor.constraint(equalTo: categoryLabel.rightAnchor, constant: 8).isActive = true
+        urgentLabel.centerYAnchor.constraint(equalTo: categoryLabel.centerYAnchor).isActive = true
         
         // title constraints
         titleLabel.leftAnchor.constraint(equalTo: descriptionView.leftAnchor, constant: 8).isActive = true
@@ -183,6 +198,7 @@ class DetailViewController: UIViewController {
         formatter.locale = Locale(identifier: "fr_FR")
 
         dateLabel.text = "Créé le \(formatter.string(from: item.creationDate))"
+        urgentLabel.isHidden = !item.isUrgent
     }
     
     // MARK: - Subscription
