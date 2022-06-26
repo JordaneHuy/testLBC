@@ -54,6 +54,7 @@ class ItemTests: XCTestCase {
             let item = try decoder.decode(Item.self, from: data)
             let itemImage = item.images
             
+            
             XCTAssertEqual("test url1", itemImage.small)
             XCTAssertEqual("test url2", itemImage.thumb)
             

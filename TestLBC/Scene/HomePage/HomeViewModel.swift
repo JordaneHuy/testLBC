@@ -21,15 +21,12 @@ class HomeViewModel {
     init(appCoordinator: AppCoordinator) {
         self.appCoordinator = appCoordinator
         
-        getData()
+        getCategories() { [weak self] in
+            self?.getListing()
+        }
     }
     
     // MARK: Methods
-    
-    func getData() {
-        getCategories()
-        getListing()
-    }
     
     func getListing() {
         HomeWorker().getListing { [weak self] items, error in
@@ -38,10 +35,11 @@ class HomeViewModel {
         }
     }
     
-    func getCategories() {
+    func getCategories(completion: @escaping () -> ()) {
         HomeWorker().getCategories { categories, error in
             guard let categories = categories else { return }
             CoreDataManager.shared.insertCategories(categories: categories)
+            completion()
         }
     }
     

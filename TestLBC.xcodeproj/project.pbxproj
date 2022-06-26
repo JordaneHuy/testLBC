@@ -30,6 +30,7 @@
 		395407192865CAC1009A5727 /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395407182865CAC1009A5727 /* ItemTableViewCell.swift */; };
 		3954071C2865F2CD009A5727 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3954071B2865F2CD009A5727 /* UIImageView+Extension.swift */; };
 		3954071E286734A2009A5727 /* ItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3954071D286734A2009A5727 /* ItemTests.swift */; };
+		39540720286889C9009A5727 /* CategoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3954071F286889C9009A5727 /* CategoryTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		395407182865CAC1009A5727 /* ItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
 		3954071B2865F2CD009A5727 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		3954071D286734A2009A5727 /* ItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTests.swift; sourceTree = "<group>"; };
+		3954071F286889C9009A5727 /* CategoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 			children = (
 				395406D828611E25009A5727 /* TestLBCTests.swift */,
 				3954071D286734A2009A5727 /* ItemTests.swift */,
+				3954071F286889C9009A5727 /* CategoryTests.swift */,
 			);
 			path = TestLBCTests;
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39540720286889C9009A5727 /* CategoryTests.swift in Sources */,
 				3954071E286734A2009A5727 /* ItemTests.swift in Sources */,
 				395406D928611E25009A5727 /* TestLBCTests.swift in Sources */,
 			);
