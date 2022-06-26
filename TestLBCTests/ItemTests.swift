@@ -69,4 +69,15 @@ class ItemTests: XCTestCase {
             XCTFail("Cannot decode: \(error)")
         }
     }
+    
+    func testAPI() {
+        HomeWorker().getListing(completion: { data, response, error in
+            guard let response = response as? HTTPURLResponse else {
+                XCTFail("Error API: \(error.debugDescription)")
+                return
+            }
+            
+            XCTAssertTrue(response.statusCode == 200)
+        })
+    }
 }

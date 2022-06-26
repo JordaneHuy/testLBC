@@ -29,14 +29,14 @@ class HomeViewModel {
     // MARK: Methods
     
     func getListing() {
-        HomeWorker().getListing { [weak self] items, error in
+        HomeWorker().getListing { [weak self] items, response, error in
             guard let items = items else { return }
             self?.items = items
         }
     }
     
     func getCategories(completion: @escaping () -> ()) {
-        HomeWorker().getCategories { categories, error in
+        HomeWorker().getCategories { categories, response, error in
             guard let categories = categories else { return }
             CoreDataManager.shared.insertCategories(categories: categories)
             completion()

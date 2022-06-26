@@ -53,4 +53,15 @@ class CategoryTests: XCTestCase {
         XCTAssertTrue(cdCategory?.id == 1)
         XCTAssertTrue(cdCategory?.name == "test name")
     }
+    
+    func testAPI() {
+        HomeWorker().getCategories(completion: { data, response, error in
+            guard let response = response as? HTTPURLResponse else {
+                XCTFail("Error API: \(error.debugDescription)")
+                return
+            }
+            
+            XCTAssertTrue(response.statusCode == 200)
+        })
+    }
 }

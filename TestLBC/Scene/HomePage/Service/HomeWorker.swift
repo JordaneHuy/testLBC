@@ -8,10 +8,10 @@
 import Foundation
 
 class HomeWorker {
-    func getListing(completion: @escaping ([Item]?, Error?) -> Void) {
-        request(endpoint: .getListing, completion: { data, error in
+    func getListing(completion: @escaping ([Item]?, URLResponse?, Error?) -> Void) {
+        request(endpoint: .getListing, completion: { data, response, error in
             guard let data = data, error == nil else {
-                completion(nil, error)
+                completion(nil, response, error)
                 return
             }
             
@@ -20,19 +20,19 @@ class HomeWorker {
 
             do {
                 let items = try decoder.decode([Item].self, from: data)
-                completion(items, nil)
+                completion(items, response, nil)
             } catch {
                 debugPrint("error in parsing : \(error)")
-                completion(nil, error)
+                completion(nil, response, error)
                 return
             }
         })
     }
     
-    func getCategories(completion: @escaping ([Category]?, Error?) -> Void) {
-        request(endpoint: .getCategories, completion: { data, error in
+    func getCategories(completion: @escaping ([Category]?, URLResponse?, Error?) -> Void) {
+        request(endpoint: .getCategories, completion: { data, response, error in
             guard let data = data, error == nil else {
-                completion(nil, error)
+                completion(nil, response, error)
                 return
             }
             
@@ -41,16 +41,16 @@ class HomeWorker {
 
             do {
                 let items = try decoder.decode([Category].self, from: data)
-                completion(items, nil)
+                completion(items, response, nil)
             } catch {
                 debugPrint("error in parsing : \(error)")
-                completion(nil, error)
+                completion(nil, response, error)
                 return
             }
         })
     }
     
-    func request(endpoint: HomeEndpoint, completion: @escaping (Data?, Error?) -> Void) {
+    func request(endpoint: HomeEndpoint, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
         let session = URLSession.shared
 
         // URL
@@ -68,16 +68,16 @@ class HomeWorker {
         let task = session.dataTask(with: urlRequest) { data, response, error in
             DispatchQueue.main.async {
                 guard let data = data, error == nil else {
-                    completion(nil, error)
+                    completion(nil, response, error)
                     return
                 }
                 
                 guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                    completion(nil, error)
+                    completion(nil, response, error)
                     return
                 }
                     
-                completion(data, error)
+                completion(data, response, error)
             }
         }
 
